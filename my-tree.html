@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<!-- 引入vue.js -->
+<script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
+<!-- 引入axios -->
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<!-- 引入elementUI样式 -->
+<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+<!-- 引入elementUI组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+</head>
+
+<body>
+
+<div id="app">
+
+  <p>{{ message }}</p>
+  <!-- elementUI自带的组件渲染数据 -->
+  <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+</div>
+
+<script>
+
+new Vue({
+  el: '#app',
+  data: {
+    message: '',
+    data:[],//树形结构数据
+    defaultProps: {//树形结构的数据字段名
+      children: 'next',
+      label: 'title'
+    }
+  },
+  //页面初始化获取数据
+  created(){
+    this.getList()
+  },
+  methods:{
+    //获取树形结构数据
+    getList() {
+      axios.get('https://cfan.cc/tc/?mod=vue&act=getdata&uid=10023&token=f9ce6b7113b2c9c0fa695c299f5e6e02')
+      .then(response => {
+        this.data = response.data.msg
+      })
+      .catch(function (error) { // 请求失败处理
+          console.log(error);
+      });
+    },
+    //展开收起树形结构触发的事件
+    handleNodeClick(data) {
+      console.log(data);
+    }
+  }
+})
+</script>
+</body>
+</html>
